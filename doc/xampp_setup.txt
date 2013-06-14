@@ -1,0 +1,8 @@
+Hinweise zur xampp Konfiguration
+
+Die Datein aus dem Ordner src/backend sollten über eurem lokalen Webserver über http://127.0.0.1/xmlProjektBackend erreichbar sein.
+
+In der Datei src/backend/sparqlEndpoint.php findet ihr die Konfiguration für den lokalen MySql server.
+
+Am besten haben wir überall das gleiche Setup, da es sonst zu Problemen kommen könnte!
+
