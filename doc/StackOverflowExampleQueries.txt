@@ -1,0 +1,19 @@
+== Title und URL von Fragen mit bestimmten Tags ==
+
+@prefix ns0: <http://purl.org/dc/elements/1.1/> .
+@prefix ns2: <http://poshrdf.org/ns/mf#> .
+
+select distinct ?url ?title WHERE {
+  ?url ns2:tag ?tag .
+  ?url ns0:title ?title .
+
+filter(?tag = "python" || ?tag = "python-2.7")
+
+}
+
+== Fragen ob die URL der Frage bekannt ist ==
+ASK  { "http://stackoverflow.com/questions/17134100/python-blowfish-encryption" ?o  ?u }
+
+== Alle Tags einer Frage ==
+@prefix ns2: <http://poshrdf.org/ns/mf#> .
+select ?tag { "http://stackoverflow.com/questions/17134100/python-blowfish-encryption" ns2:tag ?tag }
