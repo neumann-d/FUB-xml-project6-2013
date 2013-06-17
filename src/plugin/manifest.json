@@ -18,5 +18,12 @@
    "background": {
     "scripts": ["js/libs/jquery-1.9.0/jquery.min.js","eventPage.js"],
     "persistent": false
+  },
+  
+  "content_scripts": [
+  {
+	"matches": ["http://*/*","https://*/*"],
+	"js": ["js/libs/microdatajs/lib/jquery-1.4.4.min.js","js/libs/microdatajs/jquery.microdata.js","js/libs/microdatajs/jquery.microdata.rdf.js","js/microdataToRDF.js"]
   }
+  ]
 }

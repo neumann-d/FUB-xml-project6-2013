@@ -1,0 +1,101 @@
+body {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 13px;
+  margin: 8px;
+  padding: 0;
+}
+div.grippie {
+  background:#EEEEEE url(grippie.png) no-repeat scroll center 2px;
+  border-color:#DDDDDD;
+  border-style:solid;
+  border-width:0pt 1px 1px;
+  cursor:s-resize;
+  height:9px;
+  overflow:hidden;
+}
+.resizable-textarea {
+  padding-right: 6px;
+  margin-bottom: 10px;
+}
+.resizable-textarea textarea {
+  display: block;
+  margin-bottom: 0;
+  width: 100%;
+  height: 200px;
+}
+h1 {
+  display: inline;
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+}
+h1 a {
+  text-decoration: none;
+  color: black;
+}
+a {
+  color: #008;
+}
+.tool {
+  display: inline;
+  margin: 0 0 0 8px;
+  padding: 0;
+}
+.tool:before {
+  content: "<";
+  margin-right: 1px;
+  font-size: 50%;
+}
+.tool:after {
+  content: ">";
+  margin-left: 1px;
+  font-size: 50%;
+}
+.tool * {
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  color: #008;
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 13px;
+}
+.examples {
+  display: block;
+  margin: 0;
+  padding: 0 0 8px 0;
+  float: right;
+}
+.warnings {
+  clear: both;
+  font-size: 16px;
+}
+.warnings p {
+  background: #fcc;
+  padding: 4px;
+  margin: 8px 0;
+}
+.warnings p:before {
+  content: "Warning: ";
+  font-weight: bold;
+}
+iframe {
+  border: none;
+  width: 100%;
+}
+hr {
+  border: 0;
+  height: 1px;
+  width: 70%;
+  background-color: #666;
+  margin: 2em;
+}
+.download {
+  font-weight: bold;
+}
+footer {
+  margin-top: 2em;
+  text-align: center;
+}

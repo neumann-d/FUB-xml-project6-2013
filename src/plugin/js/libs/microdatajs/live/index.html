@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Live Microdata</title>
+<link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.7.2.custom.css">
+<link rel="stylesheet" href="live.css">
+<script src="../lib/jquery-1.4.4.min.js"></script>
+<script src="../lib/jquery-ui-1.7.2.custom.min.js"></script>
+<script src="../lib/jquery.textarearesizer.compressed.js"></script>
+<script src="../lib/json2.js"></script>
+<script src="../jquery.microdata.js"></script>
+<script src="../jquery.microdata.json.js"></script>
+<script src="../jquery.microdata.rdf.js"></script>
+<script src="../jquery.microdata.vcard.js"></script>
+<script src="../jquery.microdata.vevent.js"></script>
+<script src="live.js"></script>
+</head>
+<body>
+
+<h1><a href=".">Live Microdata</a></h1>
+
+<span class="tool permalink"><a href="">permalink</a></span>
+
+<form class="tool validate" action="http://validator.nu/" method="post"
+      enctype="multipart/form-data" target="_blank"
+><input type="hidden" name="showsource" value="yes"
+><input type="hidden" name="content"
+><button type="submit" title="Validate with Validator.nu (opens a new tab)"
+>validate</button></form>
+
+<form class="examples">
+Examples:
+<select title="Select an example to load it below...">
+<option value=""></option>
+<option value="vcard-jack">vCard: Jack Bauer</option>
+<option value="vcard-avenueq">vCard: Avenue Q</option>
+<option value="vevent-bluesday">vEvent: Bluesday Tuesday</option>
+<option value="work-waterfall">Licensing works: Waterfall</option>
+<option value="work-gallery">Licensing works: Gallery</option>
+<option value="rdf-geek">RDF: Just a Geek</option>
+<option value="schemaorg-book">schema.org/Book</option>
+<option value="schemaorg-person">schema.org/Person</option>
+<option value="schemaorg-product">schema.org/Product</option>
+</select>
+</form>
+
+<div class="warnings"></div>
+
+<textarea>Write HTML/Microdata markup here...</textarea>
+
+<div id="tabs">
+  <ul>
+    <li><a href="#preview">Preview</a></li>
+    <li><a href="#json" title="Microdata as JSON">JSON</a></li>
+    <li><a href="#turtle" title="RDF triples as Turtle">Turtle</a></li>
+    <li><a href="#vcard" title="Contact information as vCard">vCard</a></li>
+    <li><a href="#ical" title="Calendar events as iCalendar">iCal</a></li>
+  </ul>
+  <div id="preview"><iframe src="preview.html"></iframe></div>
+  <div id="json"></div>
+  <div id="turtle"></div>
+  <div id="vcard"></div>
+  <div id="ical"></div>
+</div>
+
+<footer>
+<p><q>When in doubt, refer to the
+<a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/microdata.html">spec</a>.</q>
+&ndash; <cite>old Chinese proverb</cite></p>
+<p>The <a href="https://gitorious.org/microdatajs/">source code</a> is available under the MIT license.</p>
+</footer>
+
+</body>
+</html>
