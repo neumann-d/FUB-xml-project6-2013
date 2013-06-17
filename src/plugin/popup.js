@@ -16,6 +16,13 @@ function getReco(tags) {
     console.log(filterString);
 
 
+    // Beim Klick auf den Button soll der zugehörige Graph angezeigt werden
+    $('#showGraph').bind("click", function() {
+        var graphQuery = "select ?url ?tag WHERE { ?url ns2:tag ?tag .  "+filterString+" }";
+        chrome.tabs.create({ url: "http://127.0.0.1/xmlProjektBackend/sgvizler-0.5/sgvizler.html?query="+graphQuery });
+    });
+
+
     // Frage ähnliche Fragen ab
     $.ajax({
         type: "POST",
@@ -26,7 +33,7 @@ function getReco(tags) {
         dataType: "json",
         success: function(json) {
             console.log(json);
-            $('body').empty();
+            $('p').empty();
             $('body').append("<p>Ähnliche Fragen: </p>");
             $('body').append("<ul></ul>");
             
@@ -84,6 +91,8 @@ var so = {
 
 // Run query as soon as the document's DOM is ready.
 document.addEventListener('DOMContentLoaded', function() {
+    
+
 
     chrome.tabs.getSelected(function(tab) {
         var url = tab.url;
