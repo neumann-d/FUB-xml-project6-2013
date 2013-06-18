@@ -103,7 +103,7 @@ function graphContainsUrl($url) {
 // Empfängt RDF Daten, die aus Microdata extrahiert wurden und speichert diese im Triplestore.
 if(!empty($_POST['url']) && !empty($_POST['microdataRDF']) ){
 	$url = $_POST['url'];
-
+	
     // Wenn es die URL im Graph schon gibt, nichts machen, TODO besser updaten?
     if (graphContainsUrl($url)) {        
         $res = new Response(null, "URL $url already visited, skip indexing");        
@@ -111,22 +111,22 @@ if(!empty($_POST['url']) && !empty($_POST['microdataRDF']) ){
         
     } else {
 	  $parser = ARC2::getTurtleParser();
-	  // FIXME Inhalt aus $_POST['microdataRDF'] wird nicht richtig geparst
 	  $data = $_POST['microdataRDF'];
+	  
 	  $parser->parse($url, $data);
 	  
 	  $triples = $parser->getTriples();
-	  print_r($triples);
+	  // print_r($triples);
 	  
 	  // Wenn keine Tripel gefunden wurden
 	  if(count($triples) < 1) {
 		  $res = new Response(null, "URL $url contains no triples");        
-		  return $res;
+
 	  } else {
 		// in Datenbank einfügen
 		$ep->insert($triples,"");
 		
-		$res = new Response(null, "URL $url: added ".count($triples)." triples: ".$triples); 
+		$res = new Response(null, "URL $url: added ".count($triples)." triples: "); 
 	  }
 	  
 	  echo(json_encode($res) );
