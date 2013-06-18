@@ -14,7 +14,7 @@ if(items.length > 0){
   $.ajax({
 	  type: "POST",
 	  url: "http://127.0.0.1/xmlProjektBackend/testEndpoint.php",
-	  data: "url=" + url + "&microdataRDF=" + escape(turtleText),
+	  data: "url=" + escape(url) + "&microdataRDF=" + escape(turtleText),
 	  dataType: "text",
 	  success: function(text) {
 		  console.log("Backend Response: "+text);
