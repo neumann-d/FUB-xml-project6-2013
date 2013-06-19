@@ -39,48 +39,41 @@ if (!$ep->isSetUp()) {
   $ep->setUp(); /* create MySQL tables */
 }
 
-
-if (!empty($_POST['url'])) {
-    $url = $_POST['url'];
-    $res = extractRDFa($url);
-    echo(json_encode($res) );
-}
-
-/**
- * Extrahiert eingebettetes rdfa aus einer beliebigen HTML Seite und
- * speichert es im triple store
- * @param string $url
- * @return Response Ein Responseobjekt
- */
-function extractRDFa($url) {
-    global $ep;
-    // Wenn es die URL im Graph schon gibt, nichts machen
+ 
+// Empfängt RDF Daten im Turtle Format und speichert diese im Triplestore.
+if(!empty($_POST['url']) && !empty($_POST['turtle']) ){
+	$url = $_POST['url'];
+	
+    // Wenn es die URL im Graph schon gibt, nichts machen, TODO besser updaten?
     if (graphContainsUrl($url)) {        
         $res = new Response(null, "URL $url already visited, skip indexing");        
-        return $res;
+        echo(json_encode($res) );
         
     } else {
-        $parser = ARC2::getSemHTMLParser();
-        $parser->parse($url);
-        $parser->extractRDF('rdfa');
-        
-        // triple Darstellung
-        $triples = $parser->getTriples();
-        
-        // Wenn kein rdfa gefunden wurde
-        if(count($triples) < 1) {
-            $res = new Response(null, "URL $url contains no rdfa");        
-            return $res;
-        }
-        
-        // in Datenbank einfügen
-        $ep->insert($triples,"");
-        
-        $res = new Response(null, "URL $url: added ".count($triples)." triples");        
-        return $res;
-    }
+	  $parser = ARC2::getTurtleParser();
+	  $data = $_POST['turtle'];
+	  
+	  $parser->parse($url, $data);
+	  
+	  $triples = $parser->getTriples();
+	  // print_r($triples);
+	  
+	  // Wenn keine Tripel gefunden wurden
+	  if(count($triples) < 1) {
+		  $res = new Response(null, "URL $url contains no triples");        
+
+	  } else {
+		// in Datenbank einfügen
+		$ep->insert($triples,"");
+		
+		$res = new Response(null, "URL $url: added ".count($triples)." triples".$triples); 
+	  }
+	  
+	  echo(json_encode($res) );
+	}
 }
 
+// TODO duplicate Code
 /**
  * Überprüft, ob eine URL schon im Graphen _irgendwo_ vorhanden ist
  * TODO: Vielleicht etwas zu streng, evt Teigraphen angeben
@@ -98,7 +91,5 @@ function graphContainsUrl($url) {
     else
         return false;
 }
- 
- 
-?>
 
+?>

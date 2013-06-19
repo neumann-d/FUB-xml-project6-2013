@@ -13,8 +13,8 @@ if(items.length > 0){
   // zum Endpoint senden
   $.ajax({
 	  type: "POST",
-	  url: "http://127.0.0.1/xmlProjektBackend/testEndpoint.php",
-	  data: "url=" + escape(url) + "&microdataRDF=" + escape(turtleText),
+	  url: "http://127.0.0.1/xmlProjektBackend/turtleReceiver.php",
+	  data: "url=" + escape(url) + "&turtle=" + escape(turtleText),
 	  dataType: "text",
 	  success: function(text) {
 		  console.log("Backend Response: "+text);

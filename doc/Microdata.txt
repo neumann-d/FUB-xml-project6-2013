@@ -1,0 +1,27 @@
+==== Datenquellen ====
+1. Shops mit schema.org/Product und internationaler GTIN für productid:
+  http://www.barcoo.com/
+  
+2. Shops mit schema.org/Product und model:
+  http://www.bestbuy.com
+  
+3. Buch Shop mit schema.org/Product und ISBN als productID:
+  http://www.jpc.de			itemprop="productID">9783785724804
+  http://www.deastore.com	content='isbn:9782709643740' itemprop='productID'
+  http://www.kidoh.de		itemprop="productID"> ISBN-13: 9783785724804
+  http://www.weltbild.de	itemprop="productID">ISBN-13: 9783785724804
+
+4. Buch Shop mit data-vocabulary.org/Product und identifier:
+  http://www.europeanbookshop.com	itemprop="identifier" content="isbn:9788408114178
+
+5. Buch Shop mit schema.org/Book und ISBN als isbn:
+  http://www.sainsburysebooks.co.uk		itemprop="isbn">978-1-4481-6979-5
+  http://www.buchfreund.de				itemprop="isbn">9783785724804
+
+  
+==== SPARQL Queries ====
+für 3. alle Produkte die "ISBN" als productID enthalten:  
+SELECT * WHERE {
+  GRAPH ?g { ?s <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:productID> ?isbn FILTER regex(?isbn, "ISBN", "i") . }
+}
+LIMIT 100
