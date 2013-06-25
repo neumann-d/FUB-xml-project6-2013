@@ -1,3 +1,4 @@
+<?
 // Zeige keine NOTICE Meldungen an
 error_reporting (E_ALL ^ E_NOTICE);
 
