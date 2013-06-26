@@ -40,7 +40,7 @@ if (!$ep->isSetUp()) {
 
 $link = $_GET['link'];
 $link = str_replace("/page/", "/data/", $link);
-$link .= ".n3";
+$link .= ".ntriples";
 
 
 
