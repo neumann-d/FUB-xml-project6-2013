@@ -1,8 +1,8 @@
 
 
-var url = document.location;
+var url = location.href;
 
-// console.log("Parsing Microdata from: "+url);
+console.log("[Frontend] Parsing Microdata from: "+url);
 var items = $(document).items();
 var turtleText = $.microdata.turtle(items);
 
@@ -14,10 +14,10 @@ if(items.length > 0){
   $.ajax({
 	  type: "POST",
 	  url: "http://127.0.0.1/xmlProjektBackend/turtleReceiver.php",
-	  data: "url=" + escape(url) + "&turtle=" + escape(turtleText),
+	  data: {url: url, turtle: turtleText},
 	  dataType: "text",
 	  success: function(text) {
-		  console.log("Backend Response: "+text);
+		  console.log("[Backend] Response: "+text);
 	  }
   });
   

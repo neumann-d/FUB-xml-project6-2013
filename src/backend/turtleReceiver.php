@@ -46,8 +46,7 @@ if(!empty($_POST['url']) && !empty($_POST['turtle']) ){
 	
     // Wenn es die URL im Graph schon gibt, nichts machen, TODO besser updaten?
     if (graphContainsUrl($url)) {        
-        $res = new Response(null, "URL $url already visited, skip indexing");        
-        echo(json_encode($res) );
+        $res = new Response(null, "URL $url already visited, skip indexing");
         
     } else {
 	  $parser = ARC2::getTurtleParser();
@@ -63,14 +62,14 @@ if(!empty($_POST['url']) && !empty($_POST['turtle']) ){
 		  $res = new Response(null, "URL $url contains no triples");        
 
 	  } else {
-		// in Datenbank einfügen
-		$ep->insert($triples,"");
+		// in Datenbank einfügen mit URL als Graph Identifier
+		$ep->insert($triples,$url);
 		
 		$res = new Response(null, "URL $url: added ".count($triples)." triples".$triples); 
 	  }
 	  
-	  echo(json_encode($res) );
 	}
+	echo(json_encode($res) );
 }
 
 // TODO duplicate Code
