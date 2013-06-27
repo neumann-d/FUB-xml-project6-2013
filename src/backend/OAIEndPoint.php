@@ -16,7 +16,7 @@ $config = array(
   'db_name' => 'xmlproject',
   'db_user' => 'root', // <- consider rights
 //TODO passwort einfuegen
-  'db_pwd' => 'ihrstinktalle',
+  'db_pwd' => '',
 
   /* store name */
   'store_name' => 'xml_store',
@@ -41,8 +41,10 @@ if (!$ep->isSetUp()) {
 }
 
 
-if (!empty($_POST['url'])) {
-    $url = $_POST['url'];
+if (!empty($_GET['url'])) {
+    $url = $_GET['url'];
+//TODO kommt ausm Plugin!
+    $url = "http://www2.informatik.uni-stuttgart.de/cgi-bin/OAI/OAI.pl?verb=ListRecords&metadataPrefix=oai_dc";
 
     $xml = new DOMDocument;
     $xml->load($url);
@@ -54,9 +56,6 @@ if (!empty($_POST['url'])) {
     $proc->importStyleSheet($xsl);
 
     extractOAI($proc->transformToXML($xml));
-
-    $res = new Response(null, "URL $url successfully indexed!");
-    return $res; 
 }
 
 /**
@@ -73,8 +72,10 @@ function extractOAI($rdf) {
         return $res;
         
     } else {
+        echo "gibts noch nich!";
         $parser = ARC2::getRDFXMLParser();
-        $base = '';
+//TODO was das?
+        $base = 'http://example.com/';
         $parser->parse($base, $rdf);
         
         // triple Darstellung
@@ -82,6 +83,7 @@ function extractOAI($rdf) {
         
         // Wenn kein OAI gefunden wurde
         if(count($triples) < 1) {
+            echo "keine Tripples!";
             $res = new Response(null, "URL $url contains no OAI-RDF");
             return $res;
         }
@@ -112,9 +114,6 @@ function graphContainsUrl($url) {
     else
         return false;
 }
-
-$res = new Response(null, "test");
-return $res;
 
 ?>
 
