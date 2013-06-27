@@ -14,7 +14,7 @@ function getURL(details) {
 			if (xml.documentElement.tagName == "OAI-PMH") {
 				$.ajax({
 					type: "POST",
-					url: "http://192.168.1.3/index.php",
+					url: "http://192.168.1.3/OAIEndPoint.php",
 					data: "url=" + details.url,
 					dataType: "text",
 					success: function(text) {
