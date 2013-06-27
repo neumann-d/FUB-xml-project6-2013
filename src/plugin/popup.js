@@ -84,19 +84,93 @@ var so = {
             }
         });
     }
-
-
-
 };
 
 // Run query as soon as the document's DOM is ready.
 document.addEventListener('DOMContentLoaded', function() {
     
-
-
     chrome.tabs.getSelected(function(tab) {
         var url = tab.url;
         if(url.indexOf("http://stackoverflow.com/") === 0)
             so.getMyTags(tab.url);
+		if(url.indexOf("http://www.bestbuy.com/") === 0)
+			getMyBrandname(tab.url);
     });
 });
+
+
+/**
+  * Fragt das Backend nach dem Markennamen des Produkts auf der aktuellen Seite ab und sucht danach andere Produkte der gleichen Marke.
+  */
+function getMyBrandname(url) {
+  var selectstring = "SELECT ?bName WHERE \n\
+					  { GRAPH <"+ url +"> { \n\
+						?b <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Brand%23:name> ?bName \n\
+						. } } LIMIT 100";
+  console.log("[Frontend] Bestbuy Select Brandname at url: "+url);
+  
+  $.ajax({
+	type: "POST",
+	url: so.sparqlEndpoint,
+	data: {query: selectstring},
+	dataType: "json",
+	success: function(json) {
+		console.log(url);
+		console.log(json);
+		
+		var brandBindings = json.results.bindings;
+		var brandNames = new Array();
+		for (var i = 0; i < brandBindings.length; i++) {
+		  brandNames.push(brandBindings[i].bName.value);
+		}
+		console.log("[Backend] Response: Bestbuy Select Brandname finished ("+brandNames.length+" found).");
+		
+		// falls Markenname gefunden, dann andere Produkte suchen
+		if(brandNames.length > 0){
+		  console.log(brandNames);
+		  getOtherProducts(brandNames);
+		} 
+	}
+  });
+}
+
+/**
+ * Fragt das Backend nach Produkten mit gegebenen Markennamen ab.
+ */
+function getOtherProducts(brandNames) {
+  var brandNameSchemaUrl = "<http://www.w3.org/1999/xhtml/microdata#http://schema.org/Brand%23:name>";
+  
+  var brandNamesString = "";
+  for (var i = 0; i < brandNames.length-1; i++) {
+	brandNamesString += "{?b "+ brandNameSchemaUrl +" \""+ brandNames[i] +"\" } \n\ UNION ";
+  }
+  brandNamesString += "{?b "+ brandNameSchemaUrl +" \""+ brandNames[brandNames.length-1] +"\" } ";
+  
+  var selectstring = "SELECT ?producturl WHERE { \n\
+					  "+ brandNamesString + " . \n\
+					  ?product ?p ?b . \n\
+					  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:url> ?producturl . \n\
+					  } LIMIT 100";
+  // console.log(selectstring);
+  console.log("[Frontend] Bestbuy Select other products");
+  $.ajax({
+	type: "POST",
+	url: so.sparqlEndpoint,
+	data: {query: selectstring},
+	dataType: "json",
+	success: function(json) {
+		$('p').empty();
+        $('body').append("<p>Andere Produkte der selben Marke: </p>");
+        $('body').append("<ul></ul>");
+		
+		// TODO nicht nur url abfragen, sondern auch Name, Bild etc.
+		var bindings = json.results.bindings;
+		for (var i = 0; i < bindings.length; i++) {
+		  $('body ul').append("<li><a href='"+bindings[i].producturl.value+"' >"+ bindings[i].producturl.value +"</a></li>");
+		}
+		console.log("[Backend] Response: Bestbuy Select other products finished ("+ bindings.length +" found).");
+		console.log(json);
+	}
+  });
+  
+}

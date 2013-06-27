@@ -2,7 +2,7 @@
 1. Shops mit schema.org/Product und internationaler GTIN für productid:
   http://www.barcoo.com/
   
-2. Shops mit schema.org/Product und model:
+2. Shops mit schema.org/Product und model + Marke:
   http://www.bestbuy.com
   
 3. Buch Shop mit schema.org/Product und ISBN als productID:
@@ -20,8 +20,20 @@
 
   
 ==== SPARQL Queries ====
-für 3. alle Produkte die "ISBN" als productID enthalten:  
+- für 3. alle Produkte die "ISBN" als productID enthalten:  
 SELECT * WHERE {
   GRAPH ?g { ?s <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:productID> ?isbn FILTER regex(?isbn, "ISBN", "i") . }
 }
 LIMIT 100
+
+- für 2. alle Produkte des selben Herstellers:
+@prefix microdata: <http://www.w3.org/1999/xhtml/microdata#> .
+@prefix brand: <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Brand%23> .
+@prefix prod: <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23> .
+SELECT ?producturl WHERE {
+  GRAPH ?g { ?b <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Brand%23:name> ?o1 .
+?product ?p ?b .
+?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:url> ?producturl .
+ }
+}
+LIMIT 10
