@@ -8,8 +8,7 @@
   "permissions": [
     "webNavigation",
     "http://127.0.0.1/",
-	"http://192.168.1.3/",
-	"http://www2.informatik.uni-stuttgart.de/cgi-bin/OAI/OAI.pl?verb=ListRecords&metadataPrefix=oai_dc",
+	"http://*/",
     "tabs",
     "https://www.google.com/"
   ],
