@@ -14,9 +14,8 @@ $config = array(
   */
   'db_host' => 'localhost',
   'db_name' => 'xmlproject',
-  'db_user' => 'root', // <- consider rights
-//TODO passwort einfuegen
-  'db_pwd' => '',
+  'db_user' => 'xmlproject', // <- consider rights
+  'db_pwd' => 'ja5ZrZV8xyzWXRWT',
 
   /* store name */
   'store_name' => 'xml_store',
@@ -53,10 +52,9 @@ if (!empty($_POST['url'])) {
     $proc = new XSLTProcessor;
     $proc->importStyleSheet($xsl);
 
-    extractOAI($proc->transformToXML($xml));
+    $res = extractOAI($proc->transformToXML($xml), $url);
 
-    $res = new Response(null, "URL $url successfully indexed!");
-    return $res; 
+    echo(json_encode($res));
 }
 
 /**
@@ -65,7 +63,7 @@ if (!empty($_POST['url'])) {
 * @param string $url
 * @return Response Ein Responseobjekt
 */
-function extractOAI($rdf) {
+function extractOAI($rdf, $url) {
     global $ep;
     // Wenn es die URL im Graph schon gibt, nichts machen
     if (graphContainsUrl($url)) {
@@ -74,8 +72,7 @@ function extractOAI($rdf) {
         
     } else {
         $parser = ARC2::getRDFXMLParser();
-        $base = '';
-        $parser->parse($base, $rdf);
+        $parser->parse($url, $rdf);
         
         // triple Darstellung
         $triples = $parser->getTriples();
@@ -112,9 +109,6 @@ function graphContainsUrl($url) {
     else
         return false;
 }
-
-$res = new Response(null, "test");
-return $res;
 
 ?>
 
