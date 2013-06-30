@@ -1,8 +1,5 @@
 <?php
 
-/* ARC2 static class inclusion */ 
-include_once('arc2/ARC2.php');
-
 /* MySQL and endpoint configuration */ 
 $config = array(
   /* login data for mysql server. 
@@ -27,13 +24,4 @@ $config = array(
   'endpoint_write_key' => 'REPLACE_THIS_WITH_SOME_KEY', /* optional, but without one, everyone can write! */
   'endpoint_max_limit' => 250, /* optional */
 );
-
-/* instantiation */
-$ep = ARC2::getStoreEndpoint($config);
-
-if (!$ep->isSetUp()) {
-  $ep->setUp(); /* create MySQL tables */
-}
-
-
 ?>
