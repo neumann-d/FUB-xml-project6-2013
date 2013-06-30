@@ -37,3 +37,20 @@ SELECT ?producturl WHERE {
  }
 }
 LIMIT 10
+
+- für 2. alle Produktinformationen
+ SELECT ?bName ?pUrl ?pName ?pImage ?pModel ?pID ?pDescription ?pPrice ?pRating WHERE 
+{ GRAPH <http://www.bestbuy.com/site/VIZIO+-+M-Series+-+32%26%2334%3B+Class+(31-1/2%26%2334%3B+Diag.)+-+LED+-+1080p+-+120Hz+-+Smart+-+HDTV/8790111.p;jsessionid=B0249622F083194DBE2D8F14AECC21EF.bbolsp-app04-183?id=1218895764645&skuId=8790111&st=VIZIO_M_Series_HDTVs_108004&cp=1&lp=1> { 
+  ?b <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Brand%23:name> ?bName . 
+  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:brand> ?b . 
+  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:aggregateRating> ?rating . 
+  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:offers> ?offer . 
+  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:url> ?pUrl . 
+  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:name> ?pName . 
+  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:image> ?pImage . 
+  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:model> ?pModel . 
+  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:productID> ?pID . 
+  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:description> ?pDescription . 
+  ?offer <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Offer%23:price> ?pPrice . 
+  ?rating <http://www.w3.org/1999/xhtml/microdata#http://schema.org/AggregateRating%23:ratingValue> ?pRating . 
+  } } LIMIT 100 

@@ -101,14 +101,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 /**
-  * Fragt das Backend nach dem Markennamen des Produkts auf der aktuellen Seite ab und sucht danach andere Produkte der gleichen Marke.
+  * Fragt das Backend nach den Markennamen der Produkte auf der aktuellen Seite ab und sucht dazu weitere Produktdetails.
   */
 function getMyBrandname(url) {
-  var selectstring = "SELECT ?bName WHERE \n\
+  var selectstring = "SELECT DISTINCT ?bName ?pUrl ?pName ?pImage ?pModel ?pID ?pDescription ?pPrice ?pRating WHERE \n\
 					  { GRAPH <"+ url +"> { \n\
-						?b <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Brand%23:name> ?bName \n\
-						. } } LIMIT 100";
+						?b <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Brand%23:name> ?bName . \n\
+						?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:brand> ?b . \n\
+						?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:aggregateRating> ?rating . \n\
+						?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:offers> ?offer . \n\
+						?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:url> ?pUrl . \n\
+						?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:name> ?pName . \n\
+						?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:image> ?pImage . \n\
+						?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:model> ?pModel . \n\
+						?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:productID> ?pID . \n\
+						?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:description> ?pDescription . \n\
+						?offer <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Offer%23:price> ?pPrice . \n\
+						?rating <http://www.w3.org/1999/xhtml/microdata#http://schema.org/AggregateRating%23:ratingValue> ?pRating . \n\
+						} } LIMIT 100";
   console.log("[Frontend] Bestbuy Select Brandname at url: "+url);
+  // console.log("[Frontend] Bestbuy Select Brandname with SELECT STRING:\n "+selectstring);
   
   $.ajax({
 	type: "POST",
@@ -119,17 +131,34 @@ function getMyBrandname(url) {
 		console.log(url);
 		console.log(json);
 		
-		var brandBindings = json.results.bindings;
+		var bindings = json.results.bindings;
 		var brandNames = new Array();
-		for (var i = 0; i < brandBindings.length; i++) {
-		  brandNames.push(brandBindings[i].bName.value);
+		
+		// Bemerkung: in der Regel sollte nur 1 Produkt(1 Markenname) auf der aktuellen Seite auftreten
+		for (var i = 0; i < bindings.length; i++) {
+		  brandNames.push(bindings[i].bName.value);
 		}
 		console.log("[Backend] Response: Bestbuy Select Brandname finished ("+brandNames.length+" found).");
-		
-		// falls Markenname gefunden, dann andere Produkte suchen
+
+		// falls Marke gefunden, dann Button anbieten, um andere Produkte zu suchen
 		if(brandNames.length > 0){
-		  console.log(brandNames);
-		  getOtherProducts(brandNames);
+		  // Produktdetails im Popup ausgeben (nur für das 1. gefundene Produkt)
+		  $('#heading').html(bindings[0].pName.value);
+		  $('#topImage').attr('src', bindings[0].pImage.value);
+		  
+		  $('#content').empty();
+		  $('#content').append("<ul></ul>");
+		  $('#content ul').append("<li><b>Marke:</b> "+ bindings[0].bName.value +"</li>");
+		  $('#content ul').append("<li><b>Modell:</b> "+ bindings[0].pModel.value +"</li>");
+		  $('#content ul').append("<li><b>Produkt ID:</b> "+ bindings[0].pID.value +"</li>");
+		  $('#content ul').append("<li><b>Preis:</b> "+ bindings[0].pPrice.value +"</li>");
+		  $('#content ul').append("<li><b>Bewertung:</b> "+ bindings[0].pRating.value +"</li>");
+		  $('#content ul').append("<li><b>Beschreibung:</b> "+ bindings[0].pDescription.value +"</li>");
+		  $('#content ul').append("<li><b>URL:</b> <a href=\""+ bindings[0].pUrl.value +"\">Microdata URL</a></li>");
+		  
+		  $('#content').append("<p>Alle Produkte mit gleichem Markennamen: </p>");
+		  $('#content p').append("<button id=\"getOtherProducts\">Anzeigen</button>");
+		  $('#getOtherProducts').bind("click", brandNames, getOtherProducts);
 		} 
 	}
   });
@@ -138,21 +167,34 @@ function getMyBrandname(url) {
 /**
  * Fragt das Backend nach Produkten mit gegebenen Markennamen ab.
  */
-function getOtherProducts(brandNames) {
-  var brandNameSchemaUrl = "<http://www.w3.org/1999/xhtml/microdata#http://schema.org/Brand%23:name>";
+function getOtherProducts(event) {
+  var brandNames = event.data;
+  console.log(brandNames);
   
+  var brandNameSchemaUrl = "<http://www.w3.org/1999/xhtml/microdata#http://schema.org/Brand%23:name>";
   var brandNamesString = "";
   for (var i = 0; i < brandNames.length-1; i++) {
 	brandNamesString += "{?b "+ brandNameSchemaUrl +" \""+ brandNames[i] +"\" } \n\ UNION ";
   }
   brandNamesString += "{?b "+ brandNameSchemaUrl +" \""+ brandNames[brandNames.length-1] +"\" } ";
-  
-  var selectstring = "SELECT ?producturl WHERE { \n\
+	
+  var selectstring = "SELECT DISTINCT ?bName ?pUrl ?pName ?pImage ?pModel ?pID ?pDescription ?pPrice ?pRating  WHERE { \n\
 					  "+ brandNamesString + " . \n\
-					  ?product ?p ?b . \n\
-					  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:url> ?producturl . \n\
+					  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:brand> ?b . \n\
+					  ?b <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Brand%23:name> ?bName . \n\
+					  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:aggregateRating> ?rating . \n\
+					  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:offers> ?offer . \n\
+					  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:url> ?pUrl . \n\
+					  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:name> ?pName . \n\
+					  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:image> ?pImage . \n\
+					  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:model> ?pModel . \n\
+					  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:productID> ?pID . \n\
+					  ?product <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23:description> ?pDescription . \n\
+					  ?offer <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Offer%23:price> ?pPrice . \n\
+					  ?rating <http://www.w3.org/1999/xhtml/microdata#http://schema.org/AggregateRating%23:ratingValue> ?pRating . \n\
 					  } LIMIT 100";
   // console.log(selectstring);
+  
   console.log("[Frontend] Bestbuy Select other products");
   $.ajax({
 	type: "POST",
@@ -160,9 +202,9 @@ function getOtherProducts(brandNames) {
 	data: {query: selectstring},
 	dataType: "json",
 	success: function(json) {
-		$('p').empty();
-        $('body').append("<p>Andere Produkte der selben Marke: </p>");
-        $('body').append("<ul></ul>");
+		// $('p').empty();
+		$('body').append("<p>Alle Produkte der gleichen Marke: </p>");
+		$('body').append("<ul></ul>");
 		
 		// TODO nicht nur url abfragen, sondern auch Name, Bild etc.
 		var bindings = json.results.bindings;
@@ -172,7 +214,10 @@ function getOtherProducts(brandNames) {
 		console.log("[Backend] Response: Bestbuy Select other products finished ("+ bindings.length +" found).");
 		console.log(json);
 	}
-  });
+  }); 
+		
+  // Erzeuge neuen Tab
+  chrome.tabs.create({ url: "./microdataSimilarProducts.html?q="+encodeURIComponent(selectstring) });
 }
   
   /**
