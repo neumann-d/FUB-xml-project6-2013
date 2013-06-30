@@ -1,9 +1,9 @@
 <?php
 
 // Zeige keine NOTICE Meldungen an
-error_reporting (E_ALL ^ E_NOTICE);
+error_reporting(E_ALL ^ E_NOTICE);
 
-/* ARC2 static class inclusion */ 
+/* ARC2 static class inclusion */
 include_once('arc2/ARC2.php');
 include_once('response.php');
 require_once './config/config.php';
@@ -14,7 +14,7 @@ require_once './config/config.php';
 $ep = ARC2::getStoreEndpoint($config);
 
 if (!$ep->isSetUp()) {
-  $ep->setUp(); /* create MySQL tables */
+    $ep->setUp(); /* create MySQL tables */
 }
 
 
@@ -33,28 +33,27 @@ if (!empty($_POST['url'])) {
 function extractRDFa($url) {
     global $ep;
     // Wenn es die URL im Graph schon gibt, nichts machen
-    if (graphContainsUrl($url)) {        
-        $res = new Response(null, "URL $url already visited, skip indexing");        
+    if (graphContainsUrl($url)) {
+        $res = new Response(null, "URL $url already visited, skip indexing");
         return $res;
-        
     } else {
         $parser = ARC2::getSemHTMLParser();
         $parser->parse($url);
         $parser->extractRDF('rdfa');
-        
+
         // triple Darstellung
         $triples = $parser->getTriples();
-        
+
         // Wenn kein rdfa gefunden wurde
-        if(count($triples) < 1) {
-            $res = new Response(null, "URL $url contains no rdfa");        
+        if (count($triples) < 1) {
+            $res = new Response(null, "URL $url contains no rdfa");
             return $res;
         }
-        
+
         // in Datenbank einfügen
-        $ep->insert($triples,"");
-        
-        $res = new Response(null, "URL $url: added ".count($triples)." triples");        
+        $ep->insert($triples, "");
+
+        $res = new Response(null, "URL $url: added " . count($triples) . " triples");
         return $res;
     }
 }
@@ -76,7 +75,5 @@ function graphContainsUrl($url) {
     else
         return false;
 }
- 
- 
 ?>
 
