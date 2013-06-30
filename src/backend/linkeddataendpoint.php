@@ -16,15 +16,15 @@ if (!$ep->isSetUp()) {
 }
 
 if (!empty($_GET['url'])) {
-    $url = $_GET['url'];
-    $url = str_replace("/page/", "/data/", $url);
+    $origin = $_GET['url'];
+    $url = str_replace("/page/", "/data/", $origin);
     $url .= ".ntriples";
 
-    $res = extractLinkedData($url);
+    $res = extractLinkedData($url,$origin);
     print_r($res);
 }
 
-function extractLinkedData($link) {
+function extractLinkedData($link, $origin) {
     global $ep;
     // Wenn es die URL im Graph schon gibt, nichts machen, TODO besser updaten?
     if (graphContainsUrl($link)) {
@@ -43,7 +43,7 @@ function extractLinkedData($link) {
             $res = new Response(null, "URL $link contains no triples");
         } else {
             // in Datenbank einfügen
-            $ep->insert($triples, $link);
+            $ep->insert($triples, $origin);
             //echo "<pre>";
             //print_r($triples);
             //echo "</pre>";
