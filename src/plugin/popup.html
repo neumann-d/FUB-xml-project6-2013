@@ -6,16 +6,15 @@
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
     <style>
       body {
-        min-width: 357px;
+        min-width: 400px;
         overflow-x: hidden;
       }
 
       img {
         margin: 5px;
-        border: 2px solid black;
         vertical-align: middle;
-        width: 75px;
-        height: 75px;
+        width: 125px;
+        
       }
     </style>
 
@@ -26,14 +25,21 @@
       - [1]: http://developer.chrome.com/extensions/contentSecurityPolicy.html
     -->
     <script src="js/libs/jquery-1.9.0/jquery.min.js"></script>
+    <script src="lib/jquery-migrate-1.2.1.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" id="sgvzlr_script" src="js/libs/sgvizler-0.5/sgvizler.js"></script>
+    <script src="common.js"></script>
+    <script src="geo.js"></script>
+    <script src="stackoverflow.js"></script>
     <script src="popup.js"></script>
      
 <base target="_blank" />
   </head>
   <body>
-      <img id="topImage" src="" alt="">
+      <img id="topImage" src="" alt="" style="float:right;">
       <h4 id="heading">Heading</h4>
-      <div id="content">Fill Me</div>
+      <div id="content"></div>
+      <button id="databtn">Data</button>
   </body>
 </html>
 

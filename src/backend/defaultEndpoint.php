@@ -9,7 +9,6 @@ include_once('response.php');
 require_once './config/config.php';
 
 
-
 /* instantiation */
 $ep = ARC2::getStoreEndpoint($config);
 
@@ -20,8 +19,17 @@ if (!$ep->isSetUp()) {
 
 if (!empty($_POST['url'])) {
     $url = $_POST['url'];
-    $res = extractRDFa($url);
-    echo(json_encode($res) );
+    $resRDFa = extractRDFa($url);
+    
+    $origin = $_POST['url'];
+    $ldurl = str_replace("/page/", "/data/", $origin);
+    $ldurl .= ".ntriples";
+
+    $resLD = extractLinkedData($ldurl,$origin);
+    
+    $response = new Response(null,$resRDFa->message." ".$resLD->message);
+    
+    echo(json_encode($response) );
 }
 
 /**
@@ -51,9 +59,47 @@ function extractRDFa($url) {
         }
 
         // in Datenbank einfügen
-        $ep->insert($triples, "");
+        $ep->insert($triples, $url);
 
         $res = new Response(null, "URL $url: added " . count($triples) . " triples");
+        return $res;
+    }
+}
+
+/**
+ * "Extrahier" linkedData
+ * @global type $ep
+ * @param type $link
+ * @param type $origin
+ * @return string|\Response
+ */
+function extractLinkedData($link, $origin) {
+    global $ep;
+    // Wenn es die URL im Graph schon gibt, nichts machen, TODO besser updaten?
+    if (graphContainsUrl($link)) {
+        $res = new Response(null, "URL $link already visited, skip indexing");
+        return res;
+    } else {
+        $parser = ARC2::getTurtleParser();
+        //$data = $_POST['turtle'];
+
+        $parser->parse($link);
+
+        $triples = $parser->getTriples();
+        // print_r($triples);
+        // Wenn keine Tripel gefunden wurden
+        if (count($triples) < 1) {
+            $res = new Response(null, "URL $link contains no triples");
+        } else {
+            // in Datenbank einfügen
+            $ep->insert($triples, $origin);
+            //echo "<pre>";
+            //print_r($triples);
+            //echo "</pre>";
+
+            $res = new Response(null, "URL $link: added " . count($triples) . " triples");
+        }
+
         return $res;
     }
 }

@@ -20,7 +20,7 @@ function getURL(details) {
 	
     $.ajax({
         type: "POST",
-        url: "http://127.0.0.1/xmlProjektBackend/defautEndpoint.php",
+        url: "http://127.0.0.1/xmlProjektBackend/defaultEndpoint.php",
         data: "url=" + details.url,
         dataType: "text",
         success: function(text) {
