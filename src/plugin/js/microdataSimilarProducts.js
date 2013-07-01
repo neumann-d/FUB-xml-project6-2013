@@ -16,9 +16,9 @@ $.ajax({
 	  var bindings = json.results.bindings;
 	  for (var i = 0; i < bindings.length; i++) {
 		var boxID = "box"+i;
-		$('body').append("<div id=\""+ boxID +"\"></div>");
+		$('body').append("<div class=\"row-fluid\"><div id=\""+ boxID +"\" class=\"span4\"></div></div>");
 		
-		if(typeof(bindings[i].pName) != "undefined") $('#'+boxID).append("<h4 class=\"heading\">"+ bindings[i].pName.value +"</h4>");
+		if(typeof(bindings[i].pName) != "undefined") $('#'+boxID).append("<h2 class=\"heading\">"+ bindings[i].pName.value +"</h2>");
 		if(typeof(bindings[i].pImage) != "undefined") $('#'+boxID).append("<img class=\"topImage\" src=\""+ bindings[i].pImage.value +"\" >");
 	   
 	   

@@ -176,7 +176,7 @@ function getMyBrandname(url) {
 			// falls Marke gefunden, dann Button anbieten, um andere Produkte zu suchen
 			if(brandNames.length > 0) {
 			  $('#content').append("<p>Alle Produkte mit gleichem Markennamen: </p>");
-			  $('#content p').append("<button id=\"getOtherProducts\">Anzeigen</button>");
+			  $('#content p').append("<button class=\"btn btn-primary\" id=\"getOtherProducts\">Anzeigen</button>");
 			  $('#getOtherProducts').bind("click", brandNames, getOtherProducts);
 			} 
 		}
