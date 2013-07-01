@@ -13,7 +13,7 @@ if(items.length > 0){
   // zum Endpoint senden
   $.ajax({
 	  type: "POST",
-	  url: "http://127.0.0.1/xmlProjektBackend/turtleReceiver.php",
+	  url: "http://127.0.0.1/xmlProjektBackend/turtleEndpoint.php",
 	  data: {url: url, turtle: turtleText},
 	  dataType: "text",
 	  success: function(text) {

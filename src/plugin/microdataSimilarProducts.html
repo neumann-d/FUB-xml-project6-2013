@@ -4,18 +4,79 @@
     <title>Alle Produkte der gleichen Marke</title>
     <meta charset='utf-8'> 
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+    <!-- <link href="css/docs.css" rel="stylesheet" type="text/css"> -->
     <style>
       body {
         min-width: 357px;
         overflow-x: hidden;
+		background: #020031; /* Old browsers */
+		background: -moz-linear-gradient(45deg,  #020031 0%, #6d3353 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#020031), color-stop(100%,#6d3353)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(45deg,  #020031 0%,#6d3353 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(45deg,  #020031 0%,#6d3353 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(45deg,  #020031 0%,#6d3353 100%); /* IE10+ */
+		background: linear-gradient(45deg,  #020031 0%,#6d3353 100%); /* W3C */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#020031', endColorstr='#6d3353',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+		-webkit-box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
+		  -moz-box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
+				box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
+		text-shadow: 0 1px 3px rgba(0,0,0,.4), 0 0 30px rgba(0,0,0,.075);
       }
-
+      
       img {
-        margin: 5px;
-        border: 2px solid black;
-        vertical-align: middle;
-        width: 75px;
-        height: 75px;
+		margin: 20px;
+		/* width: 100px; */
+		height: 100px;
+		-webkit-border-radius: 4px;
+		  -moz-border-radius: 4px;
+				border-radius: 4px;
+		-webkit-box-shadow: 0 0 5px 6px #757575;
+		  -moz-box-shadow: 0 0 5px 6px #757575;
+			box-shadow: 0 0 5px 6px #757575;
+      }
+      
+      .header {
+		color: #fff;
+		text-align: center;
+      }
+      
+      .heading {
+		color: white;
+		margin: 10px;
+		text-align: right;
+      }
+      
+      .content {
+		text-shadow: none;
+      }
+      
+      #products {
+		margin: 50px;
+      }
+      
+	  .span5 {
+		margin: 25px;
+		padding: 10px;
+		background-color: #1b1b1b;
+		border: 1px solid #1b1b1b;
+		-webkit-border-radius:	4px;
+			-moz-border-radius:	4px;
+				border-radius:	4px;
+		-webkit-box-shadow: 	3px 3px 5px 6px #1b1b1b;
+			-moz-box-shadow:	3px 3px 5px 6px #1b1b1b;
+				box-shadow:		3px 3px 5px 6px #1b1b1b;
+      }
+      
+      ul {
+		margin: 20px;
+		padding: 25px;
+		background-color: #FFFAD4;
+		-webkit-border-radius: 4px;
+		  -moz-border-radius: 4px;
+				border-radius: 4px;
+		-webkit-box-shadow: 0 0 5px 6px #757575;
+		  -moz-box-shadow: 0 0 5px 6px #757575;
+			box-shadow: 0 0 5px 6px #757575;
       }
     </style>
 
@@ -31,7 +92,12 @@
 <base target="_blank" />
   </head>
   <body>
+	<div class="header">
+	  <h3>Alle Produkte der gleichen Marke </h3>
+	</div>
 	<p>No Products found!</p>
+	<div id="products" class="row-fluid">
+	</div>
   </body>
 </html>
 
