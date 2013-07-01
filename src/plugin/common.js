@@ -1,3 +1,5 @@
+var sparqlEndpoint = "http://127.0.0.1/xmlProjektBackend/sparqlEndpoint.php";
+
 /**
  * Frage label und wikipedia url eines Dings ab
  * @param {type} url

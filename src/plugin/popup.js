@@ -70,7 +70,7 @@ function getMyBrandname(url) {
 
     $.ajax({
         type: "POST",
-        url: so.sparqlEndpoint,
+        url: sparqlEndpoint,
         data: {query: selectstring},
         dataType: "json",
 		success: function(json) {
@@ -158,7 +158,7 @@ function getMyCreator(url) {
     console.log("query= @prefix ns0: <http://purl.org/dc/elements/1.1/> . \n select ?creator { \"" + url + "\" ns0:creator ?creator } ");
     $.ajax({
         type: "POST",
-        url: so.sparqlEndpoint,
+        url: sparqlEndpoint,
         data: {query: "@prefix ns0: <http://purl.org/dc/elements/1.1/> . \n select ?creator { \"" + url + "\" ns0:creator ?creator } "},
         dataType: "json",
         success: function(json) {
