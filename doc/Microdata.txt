@@ -1,3 +1,26 @@
+==== Beispiel URLs ====
+- Marke Samsung:
+http://www.bestbuy.com/site/Galaxy+Note+10.1+Tablet+with+16GB+Memory/6315134.p?id=1218727482266&skuId=6315134&st=Samsung%20-%20Galaxy%20Tab%203%2010.1%20Tablet%20with%2016GB%20Memory%20-%20Gold%20Brown&cp=1&lp=1
+
+http://www.bestbuy.com/site/Galaxy+Note+8.0+Tablet+with+16GB+Memory/8812593.p?id=1218900304687&skuId=8812593&st=Samsung%20-%20Galaxy%20Tab%203%208.0%20Tablet%20with%2016GB%20Memory%20-%20White&cp=1&lp=5
+
+http://www.bestbuy.com/site/Samsung+-+46%26%2334%3B+Class+(45-9/10%26%2334%3B+Diag.)+-+LED+-+1080p+-+240Hz+-+Smart+-+3D+-+HDTV/8064044.p?id=1218863890704&skuId=8064044&st=Samsung_Experience_Smart_TVs_105128&cp=1&lp=1
+
+http://www.bestbuy.com/site/Samsung+-+Flip-Cover+Case+for+Samsung+Galaxy+S+4+Mobile+Phones+-+Black/8877061.p?id=1218928773705&skuId=8877061&st=Samsung_Experience_Accessories_105128&cp=1&lp=3
+
+http://www.bestbuy.com/site/Samsung+-+Galaxy+16.3-Megapixel+Digital+Camera/8816465.p?id=1218901426970&skuId=8816465&st=Samsung_Experience_Cameras_105128&cp=1&lp=1
+
+- Marke Canon:
+http://www.bestbuy.com/site/Canon+-+PIXMA+MX452+Wireless+All-In-One+Printer/7918047.p?id=1218862382557&skuId=7918047
+
+http://www.bestbuy.com/site/Canon+-+PowerShot+SX280HS+12.1-Megapixel+Digital+Camera/8808572.p?id=1218897638616&skuId=8808572
+
+http://www.bestbuy.com/site/Canon+-+EOS+Rebel+T3+12.2+Megapixel+Digital+SLR+Camera+(Body+with+Lens+Kit)+-+18+mm-55+mm+Lens/1987075.p?id=1218304513854&skuId=1987075
+
+http://www.bestbuy.com/site/Canon+-+PG-240XL+Ink+Cartridge+-+Black/4696246.p?id=1218509111258&skuId=4696246
+
+http://www.bestbuy.com/site/Canon+-+Deluxe+Carrying+Case+for+Camera%2C+-+Black/7191004.p?id=1112808506554&skuId=7191004
+
 ==== Datenquellen ====
 1. Shops mit schema.org/Product und internationaler GTIN für productid:
   http://www.barcoo.com/
@@ -54,3 +77,23 @@ LIMIT 10
   ?offer <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Offer%23:price> ?pPrice . 
   ?rating <http://www.w3.org/1999/xhtml/microdata#http://schema.org/AggregateRating%23:ratingValue> ?pRating . 
   } } LIMIT 100 
+  
+- für 2. alle Produkte mit Informationen der Marke "Samsung"
+@prefix nsP: <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Product%23> . 
+@prefix nsBrand: <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Brand%23> . 
+@prefix nsPrice: <http://www.w3.org/1999/xhtml/microdata#http://schema.org/Offer%23> . 
+@prefix nsRating: <http://www.w3.org/1999/xhtml/microdata#http://schema.org/AggregateRating%23> . 
+SELECT DISTINCT ?pBrand ?pName ?pUrl ?pImage ?pModel ?pID ?pDescription ?pPrice ?pRating  WHERE { 
+  ?product nsP::brand ?b . 
+  {?b nsBrand::name "Samsung" }  . 
+  ?b nsBrand::name ?pBrand . 
+  OPTIONAL { ?product nsP::url ?pUrl } . 
+  OPTIONAL { ?product nsP::name ?pName } . 
+  OPTIONAL { ?product nsP::image ?pImage } . 
+  OPTIONAL { ?product nsP::model ?pModel } . 
+  OPTIONAL { ?product nsP::productID ?pID } . 
+  OPTIONAL { ?product nsP::description ?pDescription } . 
+  OPTIONAL { ?product nsP::aggregateRating ?rating . ?rating nsRating::ratingValue ?pRating } . 
+  OPTIONAL { ?product nsP::offers ?offer . ?offer nsPrice::price ?pPrice } 
+} LIMIT 100
+
