@@ -15,9 +15,9 @@ function getMyBrandname(url) {
 						  OPTIONAL { ?product nsP::model ?pModel } . \n\
 						  OPTIONAL { ?product nsP::productID ?pID } . \n\
 						  OPTIONAL { ?product nsP::description ?pDescription } . \n\
-						  OPTIONAL { ?product nsP::brand ?b . ?b nsBrand::name ?pBrand } . \n\
-						  OPTIONAL { ?product nsP::aggregateRating ?rating . ?rating nsRating::ratingValue ?pRating } . \n\
-						  OPTIONAL { ?product nsP::offers ?offer . ?offer nsPrice::price ?pPrice } \n\
+						  OPTIONAL { ?product nsP::brand ?b . OPTIONAL { ?b nsBrand::name ?pBrand } } . \n\
+						  OPTIONAL { ?product nsP::aggregateRating ?rating . OPTIONAL { ?rating nsRating::ratingValue ?pRating } } . \n\
+						  OPTIONAL { ?product nsP::offers ?offer . OPTIONAL { ?offer nsPrice::price ?pPrice } } \n\
 						} } LIMIT 100";
     console.log("[Frontend] Bestbuy Select Brandname at url: " + url);
     // console.log("[Frontend] Bestbuy Select Brandname with SELECT STRING:\n "+selectstring);
@@ -99,8 +99,8 @@ function getOtherProducts(event) {
 						  OPTIONAL { ?product nsP::model ?pModel } . \n\
 						  OPTIONAL { ?product nsP::productID ?pID } . \n\
 						  OPTIONAL { ?product nsP::description ?pDescription } . \n\
-						  OPTIONAL { ?product nsP::aggregateRating ?rating . ?rating nsRating::ratingValue ?pRating } . \n\
-						  OPTIONAL { ?product nsP::offers ?offer . ?offer nsPrice::price ?pPrice } \n\
+						  OPTIONAL { ?product nsP::aggregateRating ?rating . OPTIONAL { ?rating nsRating::ratingValue ?pRating } } . \n\
+						  OPTIONAL { ?product nsP::offers ?offer . OPTIONAL { ?offer nsPrice::price ?pPrice } } \n\
 						} LIMIT 100";
 	// console.log(selectstring);
 		  
