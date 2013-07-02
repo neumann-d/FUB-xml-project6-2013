@@ -8,8 +8,8 @@ INSERT INTO <http://europeana.eu/api//v2/search.json?wskey=uhpgWiaD5&query=flowe
 
 */
 
-const API_KEY = 'uhpgWiaD5';
-const SPARQL_URL = "http://localhost/backend/sparqlEndpoint.php";
+var API_KEY = "uhpgWiaD5";
+var SPARQL_URL = "http://localhost/xmlProjektBackend/sparqlEndpoint.php";
 
 if(document.URL.indexOf("wskey=" + API_KEY) > 0) {
     console.log("parsing JSON from: " + document.URL);
@@ -20,35 +20,75 @@ if(document.URL.indexOf("wskey=" + API_KEY) > 0) {
     
     for (var i=0; i<json_object.itemsCount; i++) {
         var item = json_object.items[i];
+        // console.log(item);
         var j;
-        var query = "PREFIX dc: <http://purl.org/dc/elements/1.1/> ";
+        var query;
         
         // Queries fuer Title
         for (j=0; j<item.title.length; j++) {
-            query += "INSERT INTO <http://europeana.eu/api//v2> { " + item.link + " dc:title " + item.title[j] + "} ";
+            query = "INSERT INTO <http://europeana.eu/api//v2> { <" + item.guid + "> <http://purl.org/dc/elements/1.1/title> '" + item.title[j] + "'} ";
+            $.ajax({
+                type:       "POST",
+                url:        SPARQL_URL,
+                data:       query,
+                dataType:   "text",
+                success:    function(text) {
+                    console.log("Backend Response:\n" + text);
+                }
+            });
         }
-        
+        // console.log(query);
         // Queries fuer Provider
         for (j=0; j<item.provider.length; j++) {
-            query += "INSERT INTO <http://europeana.eu/api//v2> { " + item.link + " dc:provider " + item.provider[j] + "} ";
+            query = "INSERT INTO <http://europeana.eu/api//v2> { <" + item.guid + "> <http://purl.org/dc/elements/1.1/provider> '" + item.provider[j] + "'} ";
+            $.ajax({
+                type:       "POST",
+                url:        SPARQL_URL,
+                data:       query,
+                dataType:   "text",
+                success:    function(text) {
+                    console.log("Backend Response:\n" + text);
+                }
+            });
         }
-    
+        // console.log(query);
         // Queries fuer dataProvider
         for (j=0; j<item.dataProvider.length; j++) {
-            query += "INSERT INTO <http://europeana.eu/api//v2> { " + item.link + " dc:dataProvider " + item.dataProvider[j] + "} ";
+            query = "INSERT INTO <http://europeana.eu/api//v2> { <" + item.guid + "> <http://purl.org/dc/elements/1.1/dataProvider> '" + item.dataProvider[j] + "'} ";
+            $.ajax({
+                type:       "POST",
+                url:        SPARQL_URL,
+                data:       query,
+                dataType:   "text",
+                success:    function(text) {
+                    console.log("Backend Response:\n" + text);
+                }
+            });
         }
-        
-        query += "INSERT INTO <http://europeana.eu/api//v2> { " + item.link + " dc:type " + item.type + "}";
         // console.log(query);
-        
+        for (j=0; j<item.edmPreview.length; j++) {
+            query = "INSERT INTO <http://europeana.eu/api//v2> { <" + item.guid + "> <http://purl.org/dc/elements/1.1/preview> '" + item.edmPreview[j] + "'} ";
+            $.ajax({
+                type:       "POST",
+                url:        SPARQL_URL,
+                data:       query,
+                dataType:   "text",
+                success:    function(text) {
+                    console.log("Backend Response:\n" + text);
+                }
+            });
+        }
+        // console.log(query);
+        query = "INSERT INTO <http://europeana.eu/api//v2> { <" + item.guid + "> <http://purl.org/dc/elements/1.1/type> '" + item.type + "'}";
         $.ajax({
-        type:       "POST",
-	url:        SPARQL_URL,
-        data:       query,
-        dataType:   "text",
-        success:    function(text) {
-                        console.log("Backend Response: " + text);
-                    }
+            type:       "POST",
+            url:        SPARQL_URL,
+            data:       query,
+            dataType:   "text",
+            success:    function(text) {
+                console.log("Backend Response:\n" + text);
+            }
         });
+        // console.log(query);
     }
 }

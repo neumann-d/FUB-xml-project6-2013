@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', function() {
         else if (url.indexOf("http://www.bestbuy.com/") === 0)
             getMyBrandname(tab.url);
         
+        else if (url.indexOf("http://www.europeana.eu/") === 0) {
+            getMyArt(tab.url);
+        }
+        
         // XML Beispiel
         else if (url.indexOf("GetRecord") !== -1)
             getMyCreator(tab.url);
