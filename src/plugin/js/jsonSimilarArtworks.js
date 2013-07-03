@@ -1,13 +1,4 @@
-/*
-PREFIX foaf:    <http://xmlns.com/foaf/0.1/>
-SELECT ?nameX ?nameY ?nickY
-WHERE
-  { ?x foaf:knows ?y ;
-       foaf:name ?nameX .
-    ?y foaf:name ?nameY .
-    OPTIONAL { ?y foaf:nick ?nickY }
-  }
-*/
+// http://www.europeana.eu/portal/record/08701/9CDED76786E8F16716ABAE4A7E7AB2A7E57A3726.html?utm_source=api&amp;utm_medium=api&amp;utm_campaign=uhpgWiaD5
 
 var endpoint = "http://localhost/xmlProjektBackend/sparqlEndpoint.php";
 
@@ -15,25 +6,36 @@ var endpoint = "http://localhost/xmlProjektBackend/sparqlEndpoint.php";
  *  Fragt provider (creator) für diese URL ab und gibt die Bilder (Previews) dafür aus
  */
 function getMyArt(url) {
-    var selectstring = "PREFIX ns: <http://purl.org/dc/elements/1.1/> ." +
-    "SELECT ?preview ?title WHERE" +
-    "{ GRAPH <http://europeana.eu/api//v2> {<" + url + "> ns:provider ?x ." +
-    "?x ns:provider ?preview . " +
-    "?x ns:provider ?title . " +
-    "} } LIMIT 100";
-    console.log(selectstring);
-    // var pre = document.createElement("pre");
-    // pre.innerHTML = selectstring;
-    // document.body.appendChild(pre);
+    var parts = url.split("?");
+    var parts = parts[0].split(".");
+    var uri = ""
+    for (var j=0; j<(parts.length - 1); j++) {
+	if (j === 0) {
+	    uri += parts[j];
+	    continue;
+	}
+	uri += "." + parts[j];
+    }
     
+    uri = uri.replace(/portal/, "resolve");
+    console.log(uri);
+    var select = "PREFIX ns: <http://purl.org/dc/elements/1.1/> . " +
+	"SELECT ?title ?creator ?subject WHERE {" + 
+	"<" + uri + "> ns:publisher 'Penn Pub. Co., Philadelphia' ."  +
+	"<" + uri + "> ns:creator ?creator . " +
+	"<" + uri + "> ns:subject ?subject . " +
+	"<" + uri + "> ns:title ?title . " +
+	"}  LIMIT 100";
+	
     $.ajax({
         type: "POST",
         url: endpoint,
-        data: {query: selectstring},
+        data: {query: select},
         dataType: "text",
-	success: function(json) {
-			console.log(url);
-			console.log(json);
+	success: function(text) {
+		    var pre = document.createElement("pre");
+		    pre.innerHTML = text;
+		    document.body.appendChild(pre);
 		}
     });
 }
