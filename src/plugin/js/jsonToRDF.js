@@ -2,7 +2,7 @@
 // http://www.europeana.eu/portal/record/08701/9CDED76786E8F16716ABAE4A7E7AB2A7E57A3726.html?utm_source=api&amp;utm_medium=api&amp;utm_campaign=uhpgWiaD5
 
 var API_KEY = "uhpgWiaD5";
-var SPARQL_URL = "http://localhost/xmlProjektBackend/sparqlEndpoint.php";
+var SPARQL_URL = "http://127.0.0.1/xmlProjektBackend/sparqlEndpoint.php";
 
 if(document.URL.indexOf("wskey=" + API_KEY) > 0) {
     console.log("parsing JSON from: " + document.URL);

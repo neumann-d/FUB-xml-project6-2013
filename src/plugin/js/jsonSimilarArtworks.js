@@ -1,6 +1,6 @@
 // http://www.europeana.eu/portal/record/08701/9CDED76786E8F16716ABAE4A7E7AB2A7E57A3726.html?utm_source=api&amp;utm_medium=api&amp;utm_campaign=uhpgWiaD5
 
-var endpoint = "http://localhost/xmlProjektBackend/sparqlEndpoint.php";
+var endpoint = "http://127.0.0.1/xmlProjektBackend/sparqlEndpoint.php";
 
 /**
  *  Fragt provider (creator) für diese URL ab und gibt die Bilder (Previews) dafür aus
