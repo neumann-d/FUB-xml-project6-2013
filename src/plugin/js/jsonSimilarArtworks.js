@@ -13,6 +13,34 @@ function getImageURI(img_uri) {
     return parts[0];
 }
 
+function showSimilarArtworks(text) {
+    // console.log(text);
+    json_res = $.xml2json(text);
+    // console.log(json_res);
+		    
+    for (var i=0; i<json_res.results.result.length; i++) {
+	var target = json_res.results.result[i].binding[0].uri;
+	// console.log(target);
+	var title = json_res.results.result[i].binding[1].literal;
+	// console.log(title);
+	var img_src = json_res.results.result[i].binding[2].uri;
+	img_src = decodeURIComponent(img_src);
+	// console.log(img);
+	if (checkIfImage(img_src)) {
+	    var link = document.createElement("a");
+	    link.href = target;
+	    link.title = title;
+			    
+	    var img = document.createElement("img");
+	    img.src = getImageURI(img_src);
+			    
+	    link.appendChild(img);
+	    // console.log(link);
+	    document.body.appendChild(link);
+	}
+    }
+}
+
 function getSelectByPublisher(publisher) {
     var select = "PREFIX ns: <http://purl.org/dc/elements/1.1/> . " +
 	"SELECT ?url ?title ?preview WHERE {" +
@@ -69,35 +97,16 @@ function getMyArt(url) {
 		url: endpoint,
 		data: {query: publisher_select},
 		dataType: "text",
-		success: function(text) {
-		    // console.log(text);
-		    json_res = $.xml2json(text);
-		    // console.log(json_res);
-		    
-		    for (var i=0; i<json_res.results.result.length; i++) {
-			var target = json_res.results.result[i].binding[0].uri;
-			// console.log(target);
-			var title = json_res.results.result[i].binding[1].literal;
-			// console.log(title);
-			var img_src = json_res.results.result[i].binding[2].uri;
-			img_src = decodeURIComponent(img_src);
-			// console.log(img);
-			if (checkIfImage(img_src)) {
-			    var link = document.createElement("a");
-			    link.href = target;
-			    link.title = title;
-			    
-			    var img = document.createElement("img");
-			    img.src = getImageURI(img_src);
-			    
-			    link.appendChild(img);
-			    // console.log(link);
-			    document.body.appendChild(link);
-			}
-		    }
-		}
+		success: showSimilarArtworks
 	    });
 	    
+	    $.ajax({
+		type: "POST",
+		url: endpoint,
+		data: {query: provider_select},
+		dataType: "text",
+		success: showSimilarArtworks
+	    });
 	}
     });
 }
